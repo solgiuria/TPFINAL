@@ -1,4 +1,4 @@
 package com.reportalo.tpFinal.model;
 
-public class Admin {
+public class Tipo_Reporte {
 }

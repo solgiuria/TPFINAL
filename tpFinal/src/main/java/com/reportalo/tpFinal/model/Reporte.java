@@ -24,7 +24,6 @@ public class Reporte {
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
-
     private String descripcion;
     private LocalDateTime fecha_hora;
     private String ubicacion;

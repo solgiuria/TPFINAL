@@ -18,7 +18,7 @@ public class Reporte {
 
     @ManyToOne
     @JoinColumn(name = "id_subTipoReporte") //el nombre de la columna en mysql
-    private Subtipo_Reporte subtipo; //el nombre del atributo en java
+    private Subtipo_Reporte subtipo; //el nombre del atributo en java al cual se asocia la fk
 
 
     private String descripcion;

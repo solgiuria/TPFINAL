@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
+
 
 @Entity
 @Data //incluye @getter @setter @toString @HashCode @equals
@@ -16,7 +16,6 @@ import java.util.List;
 @Table(name = "Subtipo_Reporte")
 
 public class Subtipo_Reporte {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

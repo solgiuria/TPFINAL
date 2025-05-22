@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data //incluye @getter @setter @toString @HashCode @equals
 @NoArgsConstructor
@@ -15,8 +17,12 @@ import lombok.NoArgsConstructor;
 
 public class Subtipo_Reporte {
 
-    @OneToMany(mappedBy = "subtipo", cascade = CascadeType.ALL) //cualq modif a esta tabla afecta a reporte
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "subtipo", cascade = CascadeType.ALL) //cualq modif a esta tabla afecta a reporte
+    private List<Reporte> reportes; //con esto podemos ver todos los reportes de un subtipo
 
     @ManyToOne //subtipo puede tener asociado solo un tipo
     @JoinColumn(name = "id_tipoReporte")

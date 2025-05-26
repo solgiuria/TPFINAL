@@ -25,6 +25,6 @@ public class Tipo_Reporte {
 
 
     @OneToMany(mappedBy = "tipo_reporte", cascade = CascadeType.ALL) //un tipo puede estar asociado a muchos subtipos
-    private Long id;
+    private List<Subtipo_Reporte> subtipos_reporte;
 
 }

@@ -1,9 +1,6 @@
 package com.reportalo.tpFinal.DTO;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Data
@@ -22,7 +19,7 @@ public class RegistroDTO {
     @Email(message = "El email debe ser valido")
     private String email;
 
-    @NotBlank(message = "El dni es obligatorio")
+    @NotNull(message = "El dni es obligatorio")
     @Pattern(regexp = "\\d{7,8}", message = "El DNI debe tener entre 7 y 8 dígitos")
     private int dni;
 

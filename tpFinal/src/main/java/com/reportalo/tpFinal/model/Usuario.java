@@ -26,7 +26,4 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Reporte> reportes = new ArrayList<>();
-
-
-
 }

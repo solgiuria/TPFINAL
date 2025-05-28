@@ -45,6 +45,9 @@ public class CargaInicialUsuario {
 }
 
 
+
+
+
 //PostConstruct es una anotación de Java (no solo de Spring) que marca un método para que se ejecute automáticamente justo después de que el bean haya sido creado e inyectado, es decir, después del constructor y después de que se resolvieron las dependencias (@Autowired).
 /*
 * Un bean es simplemente un objeto que Spring crea, configura y administra por vos.

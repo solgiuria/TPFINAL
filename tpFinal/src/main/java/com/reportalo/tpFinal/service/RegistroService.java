@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor //crea un constru diciendo q los atribs q son final si o si son requeridos para crear un objeto RegistroService, es una forma de inyeccion de dependencias. Si hicieramos un constru y se los pasamos seria otra
-public class RegistroService implements UsuarioRepository{
+public class RegistroService{
 
     private final UsuarioRepository usuarioRepository;
     private final JdbcUserDetailsManager userDetailsManager;
@@ -43,12 +43,7 @@ public class RegistroService implements UsuarioRepository{
                     .password(passwordEncoder.encode(dto.getPassword()))
                     .build();
 
-            usuarioRepository.registrarUsuarioDB(usuario);
+            usuarioRepository.save(usuario);
     }
-
-
-
-
-
 
 }

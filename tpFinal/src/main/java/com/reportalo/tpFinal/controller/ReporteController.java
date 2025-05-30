@@ -3,13 +3,14 @@ package com.reportalo.tpFinal.controller;
 import com.reportalo.tpFinal.model.Reporte;
 import com.reportalo.tpFinal.service.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reportes")
+@RequestMapping("/reportes")
 @CrossOrigin(origins = "*")
 public class ReporteController {
 
@@ -21,10 +22,10 @@ public class ReporteController {
     }
 
     @PostMapping
-    public ResponseEntity<Reporte> crearReporte(@RequestBody Reporte reporte) {
+    public ResponseEntity<String> crearReporte(@RequestBody ReporteDTO reporte) {
         try {
-            Reporte nuevoReporte = reporteService.addReporte(reporte);
-            return ResponseEntity.ok(nuevoReporte);
+            reporteService.addReporte(reporte);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Reporte creado exitosamente!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -40,7 +41,7 @@ public class ReporteController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
     public ResponseEntity<Reporte> obtenerReportePorId(@PathVariable Long id) {
         try {
             Reporte reporte = reporteService.getReporteById(id);
@@ -50,21 +51,21 @@ public class ReporteController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Reporte> actualizarReporte(@PathVariable Long id, @RequestBody Reporte reporte) {
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<String> actualizarReporte(@PathVariable Long id, @RequestBody Reporte reporte) {
         try {
             Reporte reporteActualizado = reporteService.updateReporte(id, reporte);
-            return ResponseEntity.ok(reporteActualizado);
+            return ResponseEntity.ok("Reporte actualizado exitosamente!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarReporte(@PathVariable Long id) {
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminarReporte(@PathVariable Long id) {
         try {
             reporteService.deleteReporte(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Reporte eliminado exitosamente!");
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

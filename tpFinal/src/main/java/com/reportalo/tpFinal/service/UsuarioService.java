@@ -6,7 +6,6 @@ import com.reportalo.tpFinal.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -48,15 +47,17 @@ public class UsuarioService {
     }
 
     //Agregar usuario
-    public Usuario addUser(Usuario usuario){
-        if(usuario == null){
-            throw new IllegalArgumentException("El usuario no puede ser nulo");
-        }
-        try {
-            return  usuarioRepository.save(usuario);
-        }catch (RuntimeException e){
-            throw new RuntimeException("No se pudo agregar el usuario" + e.getMessage());
-        }
+    public Usuario addUser(UsuarioDTO usuario){
+        Usuario user = Usuario.builder()
+                .username(usuario.getUsername())
+                .nombre(usuario.getNombre())
+                .apellido(usuario.getApellido())
+                .email(usuario.getEmail())
+                .dni(usuario.getDni())
+                .permiso(usuario.getTipo_permiso())
+                .build();
+
+        return usuarioRepository.save(user);
     }
     //Eliminar usuario
     public void deleteUser(Long id){
@@ -83,12 +84,16 @@ public class UsuarioService {
             if(usuarioOptional.isEmpty()){
                 throw new IllegalArgumentException("No existe un usuario con el id: " + id);
             }
-            Usuario u = usuarioOptional.get();
-            u.setUsername(usuarioActualizado.getUsername());
-            u.setNombre(usuarioActualizado.getNombre());
-            u.setApellido(usuarioActualizado.getApellido());
-            u.setEmail(usuarioActualizado.getEmail());
-            u.setDni(usuarioActualizado.getDni());
+            Usuario u = Usuario.builder()
+                    .dni(usuarioActualizado.getDni())
+                    .email(usuarioActualizado.getEmail())
+                    .apellido(usuarioActualizado.getApellido())
+                    .nombre(usuarioActualizado.getNombre())
+                    .username(usuarioActualizado.getUsername())
+                    .permiso(usuarioActualizado.getPermiso())
+                    .reportes(usuarioActualizado.getReportes())
+                    .build();
+
             return usuarioRepository.save(u);
         }catch (RuntimeException e){
             throw new RuntimeException("No se pudo actualizar el usuario" + e.getMessage());

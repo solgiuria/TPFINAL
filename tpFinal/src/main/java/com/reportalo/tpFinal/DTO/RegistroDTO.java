@@ -20,7 +20,7 @@ public class RegistroDTO {
     private String email;
 
     @NotNull(message = "El dni es obligatorio")
-    @Pattern(regexp = "\\d{7,8}", message = "El DNI debe tener entre 7 y 8 dígitos")
+   // @Pattern(regexp = "\\d{7,8}", message = "El DNI debe tener entre 7 y 8 dígitos")
     private int dni;
 
     @NotBlank(message = "El nombre de usuario es obligatorio")

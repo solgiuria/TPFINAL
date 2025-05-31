@@ -27,5 +27,7 @@ public class Reporte {
     private String descripcion;
     private LocalDateTime fecha_hora;
     private String ubicacion;
+
+    @Enumerated(EnumType.STRING)
     private EstadoReporte estado;
 }

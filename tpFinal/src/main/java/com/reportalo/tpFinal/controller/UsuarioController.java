@@ -20,15 +20,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        try {
-            Usuario nuevoUsuario = usuarioService.addUser(usuario);
-            return ResponseEntity.ok(nuevoUsuario);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+
 
     @GetMapping
     public ResponseEntity<List<Usuario>> obtenerTodosLosUsuarios() {

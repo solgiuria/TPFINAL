@@ -47,17 +47,7 @@ public class UsuarioService {
         }
     }
 
-    //Agregar usuario
-    public Usuario addUser(Usuario usuario){
-        if(usuario == null){
-            throw new IllegalArgumentException("El usuario no puede ser nulo");
-        }
-        try {
-            return  usuarioRepository.save(usuario);
-        }catch (RuntimeException e){
-            throw new RuntimeException("No se pudo agregar el usuario" + e.getMessage());
-        }
-    }
+
     //Eliminar usuario
     public void deleteUser(Long id){
         if(id == null || id <= 0){

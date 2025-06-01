@@ -81,7 +81,7 @@ public class ReporteService {
     }
 
     //Actualizar reporte
-    public Reporte updateReporte(long id, Reporte reporteActualizado){
+    public Reporte updateReporte(long id, String estadoNuevo){
         if(reporteActualizado == null){
             throw new IllegalArgumentException("El reporte no puede ser nulo");
         }

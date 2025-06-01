@@ -20,9 +20,9 @@ public class RegistroController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<String> registrar(@Valid @RequestBody RegistroDTO dto, BindingResult resultDTOvalidations){ //ResponseEntity<String>, en BindingResult se guardar los rdos del @Valid de las validaciones del DTO (@Size, @Email, etc etc)
-        if(resultDTOvalidations.hasErrors()){                                                                         //si hay un error de validacion en el json q llego x postman
-            String err = resultDTOvalidations.getFieldError().getDefaultMessage();                                    //agarra el 1er error y el msj q nosotros definimos en el dto, ej: "el username no puede tener - de 3 caracts
+    public ResponseEntity<String> registrar(@Valid @RequestBody RegistroDTO dto, BindingResult resultDTOvalidation){ //ResponseEntity<String>, en BindingResult se guardar los rdos del @Valid de las validaciones del DTO (@Size, @Email, etc etc)
+        if(resultDTOvalidation.hasErrors()){                                                                         //si hay un error de validacion en el json q llego x postman
+            String err = resultDTOvalidation.getFieldError().getDefaultMessage();                                    //agarra el 1er error y el msj q nosotros definimos en el dto, ej: "el username no puede tener - de 3 caracts
             return ResponseEntity.badRequest().body(err);                                                             //esto genera un codigo 400 y de cuerpo le damos nuestro msj
         }
         service.registrarUsuario(dto);

@@ -18,7 +18,7 @@ public class Subtipo_Reporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @OneToMany(mappedBy = "subtipo", cascade = CascadeType.ALL) //cualq modif a esta tabla afecta a reporte
     private List<Reporte> reportes; //con esto podemos ver todos los reportes de un subtipo

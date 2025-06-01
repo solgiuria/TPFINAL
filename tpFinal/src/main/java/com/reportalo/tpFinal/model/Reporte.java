@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Reporte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id ;
+    private long id ;
 
     @ManyToOne
     @JoinColumn(name = "id_subTipoReporte") //el nombre de la columna en mysql

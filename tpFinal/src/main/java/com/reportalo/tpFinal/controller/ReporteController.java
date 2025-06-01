@@ -56,18 +56,15 @@ public class ReporteController {
 
     //PARA QUE EL CIVIL VEA SUS REPORTES Y PARA QUE EL ADMIN VEA TODOS LOS REPORTES PERO FILTRADO X USUARIO   @ReporteService.perteneceAlUsuario...  @ invocamos un metodo de un bean (la clase ReporteServicio "se vuelve" un bean cuando le ponemos el @Service, Spring interpreta q se debe hacer cargo de la creacion e inyeccion de ese objeto. El @ReporteService.metodo solo lo podemos hacer aca adentro
 
-    @PreAuthorize("@reporteService.validarIdUsuario(#id_usuario, authentication.principal.id) or hasRole('ADMIN')")   //si no pones esto cualquier usuario loggeado (no admin) podria ver los reportes de cualquier otro usuario poniendo el id, y esto es incorrecto, tiene q poder ver solo SUS reportes, entonces verificamos q el id q pone sea el mismo q el id del usuario q esta intentando hacer una peticion (es decir, el usuario loggeado) o que sea un admin, q ahi si puede ver los reportes de cualquier usuario de manera filtrada
+    @PreAuthorize("@reporteService.validarIdUsuario(#id_usuario, authentication.principal.id) or hasRole('ADMIN')")   //ACA CONTROLO ACCESOS NADA MAS, si llego un id de un usuario QUE NO EXISTE ESO RECIEN SE VALIDA EN GET REPORTES X USUARIO, PORQ NO TIENE Q VER CON CONTROL DE ACCESO (Y TIRA ACCESSDENIEDEXCEP SI LOS ID NO COINCIDEN). si no pones esto cualquier usuario loggeado (no admin) podria ver los reportes de cualquier otro usuario poniendo el id, y esto es incorrecto, tiene q poder ver solo SUS reportes, entonces verificamos q el id q pone sea el mismo q el id del usuario q esta intentando hacer una peticion (es decir, el usuario loggeado) o que sea un admin, q ahi si puede ver los reportes de cualquier usuario de manera filtrada
     @GetMapping("/usuario/{id_usuario}")
-    public ResponseEntity<Reporte> obtenerReportesPorUsuario(@PathVariable Long id) {
+    public ResponseEntity<List<Reporte>> obtenerReportesPorUsuario(@PathVariable Long id) {
         try {
-            Reporte reporte = reporteService.getReportesById_Usuario(id);
-            return ResponseEntity.ok(reporte);                                                                  //si no encuentra reportes para ese usuario no lo trato como error, devuelvo un ok (200) con lista vacia
+            List<Reporte> reportes = reporteService.getReportesPorIdUsuario(id);
+            return ResponseEntity.ok(reportes);                                                                  //si no encuentra reportes para ese usuario no lo trato como error, devuelvo un ok (200) con lista vacia
         }
         catch(UsuarioNoEncontradoException e){
             return ResponseEntity.notFound().build();
-        }
-        catch(AccessDeniedException e){                                                                       //si se ingresa un id que no es el del usuario autenticado/activo/el q se logeo
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -86,9 +83,6 @@ public class ReporteController {
         }
         catch (ReporteNoEncontradoException e) {
             return ResponseEntity.notFound().build();
-        }
-        catch(AccessDeniedException e){
-           return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -149,7 +143,7 @@ public class ReporteController {
     //FALTA METODO ACTUALIZAR ESTADO REPORTES  (listo en controller no en service)
     //FALTA METODO VER REPORTES POR TIPO DE REPORTE
     //FALTA METODO VER REPORTES POR SUBTIPO DE REPORTE (IDEALMENTE)
-    //FALTA METODO PARA VALIDAR QUE EL ID_USUARIO INGRESADO CORRESPONDA EL ID_USUARIO DEL USUARIO QUE SE AUTENTICO (OSEA DEL QUE ESTA USANDO EL PROGRAMA) (en service)
-    //FALTA METODO PARA VALIDAR QUE EL ID_REPORTE PERTENEZCA AL USUARIO QUE HIZO LA PETICION (ES DECIR: QUE EL ID_USUARIO ASOCIADO A ESE REPORTE SEA == AL ID_USUARIO DEL USUARIO AUTENTICADO)
+    //lISTO. FALTA METODO PARA VALIDAR QUE EL ID_USUARIO INGRESADO CORRESPONDA EL ID_USUARIO DEL USUARIO QUE SE AUTENTICO (OSEA DEL QUE ESTA USANDO EL PROGRAMA) (en service)
+    //LISTO. FALTA METODO PARA VALIDAR QUE EL ID_REPORTE PERTENEZCA AL USUARIO QUE HIZO LA PETICION (ES DECIR: QUE EL ID_USUARIO ASOCIADO A ESE REPORTE SEA == AL ID_USUARIO DEL USUARIO AUTENTICADO)
 
 }

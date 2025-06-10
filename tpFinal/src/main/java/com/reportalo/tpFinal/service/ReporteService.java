@@ -1,5 +1,6 @@
 package com.reportalo.tpFinal.service;
 
+import com.reportalo.tpFinal.enums.EstadoReporte;
 import com.reportalo.tpFinal.exceptions.ReporteNoEncontradoException;
 import com.reportalo.tpFinal.exceptions.UsuarioNoEncontradoException;
 import com.reportalo.tpFinal.model.Reporte;
@@ -21,29 +22,41 @@ public class ReporteService {
     private final UsuarioRepository usuarioRepository;
 
 
-    //validamos q el id de usuario corresponda al id del usuario que se logeo y no a otro
-    public boolean validarIdUsuario(Long idPath, Long idUsuarioAutenticado){
-        return idPath.equals(idUsuarioAutenticado);
+
+
+    //validamos q el id de usuario corresponda al id del usuario que se logeo y no a
+
+    public boolean validarIdUsuario(Long idPath,String username){
+
+        System.out.println("soy el id de usuario que ingresaste en la url: " + idPath + "soy el username del usuario que se autentico: " + username);
+
+        Optional<Usuario> optionalUsuario =usuarioRepository.findByUsername(username);
+        System.out.println("encontro el usuario x su username? " + optionalUsuario.isPresent());
+
+        return optionalUsuario
+                .map(usuario -> usuario.getId().equals(idPath))
+                .orElse(false);
+    }
+
+
+
+    //validamos que el reporte pertenezca al usuario autenticado
+
+    public boolean validarReportePerteneceUsuario(Long idPath, String username) {
+        System.out.println("soy el id de reporte que ingresaste en la url: " + idPath + "soy el username del usuario que se autentico: " + username);
+        return reporteRepository.findById(idPath)
+                .map(reporte -> reporte.getUsuario().getUsername().equals(username))//en la tabla no tengo EL USUARIO como tal sino q tengo el id, pero en java si miro la relacion en las tablas SI lo tengo
+                .orElse(false);
     }
 
 
 
     //validamos que el usuario exista y retornamos sus reportes
     public List<Reporte> getReportesPorIdUsuario(Long id){
-       if(!usuarioRepository.existsById(id)){
-           throw new UsuarioNoEncontradoException("no existe ese usuario");
-       }
+        if(!usuarioRepository.existsById(id)){
+            throw new UsuarioNoEncontradoException("no existe ese usuario");
+        }
         return reporteRepository.findByUsuarioId(id);
-    }
-
-
-
-    //validamos que el reporte pertenezca al usuario autenticado
-    public boolean validarReportePerteneceUsuario(Long idPath, Long idUsuarioAutenticado){
-        Optional<Reporte> optReporte = reporteRepository.findById(idPath);
-        return optReporte
-                .map(reporte -> reporte.getUsuario().getId().equals(idUsuarioAutenticado))
-                .orElse(false);
     }
 
 
@@ -53,19 +66,14 @@ public class ReporteService {
                .orElseThrow(()-> new ReporteNoEncontradoException("no existe ese reporte"));
     }
 
+    public List<Reporte> getReportesPorEstado(EstadoReporte estado){
+        return reporteRepository.findByEstado(estado);
+    }
 
 
     //Lista de los reporte QUE NO HAYA REGISTRADOS NO ES UN ERROR POR ENDE NO TIRA EXCEP
     public List<Reporte> getAllReportes(){
-        try{
-           List<Reporte>  reportes = reporteRepository.findAll();
-            if(reportes.isEmpty()){
-                throw new IllegalArgumentException("No hay reportes registrados");
-            }
-            return reportes;
-        }catch(RuntimeException e){
-            throw new RuntimeException("No hay reportes registrados" + e.getMessage());
-        }
+           return reporteRepository.findAll();
     }
 
     //Crear
@@ -90,27 +98,20 @@ public class ReporteService {
     }
 
     //Eliminar por id
-    public void deleteReporte(Long id){
-        if(id == null || id <= 0){
-            throw new IllegalArgumentException("El id del reporte no puede ser nulo o negativo");
+    public void deleteReporte(Long id){ //no evaluo q sea null porq eso ya pasa con el @PathVariable
+        if(!reporteRepository.existsById(id)){
+            throw new ReporteNoEncontradoException("no existe ese reporte");
         }
-        try {
-           if(!reporteRepository.existsById(id)){
-                throw new IllegalArgumentException("No existe un reporte con el id: " + id);
-            }
-             reporteRepository.deleteById(id);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Error al eliminar el reporte con el id: " + id);
-        }
+        reporteRepository.deleteById(id);
+
     }
 
     //Actualizar reporte  SE SUPONE QUE ACTUALIZAS EL ESTADO NO T0DO (ES MAS FACIL HACER SI EL REPORTE EXISTE ACTUALIZO Y SINO TIRO EXCEP REPORTE NO ENCONTRADO
-    public Reporte updateReporte(long id, String estadoNuevo){
+    public Reporte updateReporte(long id, EstadoReporte estadoNuevo){
         Reporte reporte = reporteRepository.findById(id)
                 .orElseThrow(() -> new ReporteNoEncontradoException("no existe ese reporte"));
-
-
-
+        reporte.setEstado(estadoNuevo);
+        return reporte;
     }
 
 }

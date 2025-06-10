@@ -3,6 +3,7 @@ package com.reportalo.tpFinal.service;
 import com.reportalo.tpFinal.model.Usuario;
 import com.reportalo.tpFinal.repository.UsuarioRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
 
     //metodo para buscar por id
     public Usuario getUserById(Long id){

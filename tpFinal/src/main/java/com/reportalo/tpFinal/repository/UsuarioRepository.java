@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
-   //averiguar COMO entiende QUE DEBE hacer
+   //averiguar COMO entiende QUE DEBE hacer (x convensiones de jpa)
     Optional<Usuario> findByUsername(String username);
 }

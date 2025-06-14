@@ -41,11 +41,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Verificamos si el header es nulo o no empieza con "Bearer "
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
+            System.out.println("entre aca!");
             return;                                                      //no hay token, dejamos q el resto de la cadena siga
         }
 
         //extraemos el token sin el prefijo Bearer
         String token = authHeader.substring(7);
+
 
         //obtenemos el nombre del usuario desde el token
         String username = jwtUtil.extractUsername(token);

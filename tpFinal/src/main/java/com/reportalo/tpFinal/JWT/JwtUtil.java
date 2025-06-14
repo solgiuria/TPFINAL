@@ -1,6 +1,7 @@
 package com.reportalo.tpFinal.JWT;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class JwtUtil {
     private String SECRET;
     @Value("${EXPIRATION_TIME}")
     private long EXPIRATION_TIME; // 1 día en milisegundos, tiempo que dura válido el token:
+
 
     // Genera un JWT con username, fecha de emisión y expiración
     public String generateToken(UserDetails userDetails) {

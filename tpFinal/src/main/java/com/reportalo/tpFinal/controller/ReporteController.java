@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -55,10 +54,8 @@ public class ReporteController {
 
 
     //PARA QUE EL CIVIL VEA SUS REPORTES Y PARA QUE EL ADMIN VEA TODOS LOS REPORTES PERO FILTRADO X USUARIO   @ReporteService.perteneceAlUsuario...  @ invocamos un metodo de un bean (la clase ReporteServicio "se vuelve" un bean cuando le ponemos el @Service, Spring interpreta q se debe hacer cargo de la creacion e inyeccion de ese objeto. El @ReporteService.metodo solo lo podemos hacer aca adentro
-    //ACA COMENTI UN ERROR, LA CONDI DEL PRE NO FUNCIONA X LA FORMA DE MANEJAR SPRING SEC Y LA AUTENTIF Q ELEGIMOS (LAS DOS TABLAS) Y USERS NO TIENE COLUMNA ID (Q ES LA TABLA PRINCIPAL Q LE DIJIMOS Q UTILICE PARA AUTENTIFICAR) ENTONCES EN VES DE PASARLE EL ID DEL AUTENTICADO LE TENGO Q PASAR EL USERNAME, PARA ASI ENCONTRAR EL USUARIO CON ESE USERNAME Y OBTENER SU ID, Y COMPARAR AHORA SI, SI LOS ID SON IGUALES
 
-
-    @PreAuthorize("@reporteService.validarIdUsuario(#id_usuario, authentication.name) or hasRole('ADMIN')")   //ACA CONTROLO ACCESOS NADA MAS, si llego un id de un usuario QUE NO EXISTE ESO RECIEN SE VALIDA EN GET REPORTES X USUARIO, PORQ NO TIENE Q VER CON CONTROL DE ACCESO (Y TIRA ACCESSDENIEDEXCEP SI LOS ID NO COINCIDEN). si no pones esto cualquier usuario loggeado (no admin) podria ver los reportes de cualquier otro usuario poniendo el id, y esto es incorrecto, tiene q poder ver solo SUS reportes, entonces verificamos q el id q pone sea el mismo q el id del usuario q esta intentando hacer una peticion (es decir, el usuario loggeado) o que sea un admin, q ahi si puede ver los reportes de cualquier usuario de manera filtrada
+   @PreAuthorize("@reporteService.validarIdUsuario(#id_usuario, authentication.name) or hasRole('ADMIN')")   //ACA CONTROLO ACCESOS NADA MAS, si llego un id de un usuario QUE NO EXISTE ESO RECIEN SE VALIDA EN GET REPORTES X USUARIO, PORQ NO TIENE Q VER CON CONTROL DE ACCESO (Y TIRA ACCESSDENIEDEXCEP SI LOS ID NO COINCIDEN). si no pones esto cualquier usuario loggeado (no admin) podria ver los reportes de cualquier otro usuario poniendo el id, y esto es incorrecto, tiene q poder ver solo SUS reportes, entonces verificamos q el id q pone sea el mismo q el id del usuario q esta intentando hacer una peticion (es decir, el usuario loggeado) o que sea un admin, q ahi si puede ver los reportes de cualquier usuario de manera filtrada
     @GetMapping("/usuario/{id_usuario}")
     public ResponseEntity<List<Reporte>> obtenerReportesPorUsuario(@PathVariable Long id_usuario) {
         try {
@@ -109,7 +106,6 @@ public class ReporteController {
 
 
     //SOLO PARA EL ADMIN
-
     @PutMapping("/{id}/{estado_nuevo})")
     public ResponseEntity<Reporte> actualizarEstadoReporte(@PathVariable Long id, @PathVariable EstadoReporte estadoNuevo) {
         try {
@@ -139,12 +135,5 @@ public class ReporteController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-    //FALTA METODO OBTENER REPORTES POR ESTADO  (listo en controller no en service)
-    //FALTA METODO ACTUALIZAR ESTADO REPORTES  (listo en controller no en service)
-    //FALTA METODO VER REPORTES POR TIPO DE REPORTE
-    //FALTA METODO VER REPORTES POR SUBTIPO DE REPORTE (IDEALMENTE)
-    //lISTO. FALTA METODO PARA VALIDAR QUE EL ID_USUARIO INGRESADO CORRESPONDA EL ID_USUARIO DEL USUARIO QUE SE AUTENTICO (OSEA DEL QUE ESTA USANDO EL PROGRAMA) (en service)
-    //LISTO. FALTA METODO PARA VALIDAR QUE EL ID_REPORTE PERTENEZCA AL USUARIO QUE HIZO LA PETICION (ES DECIR: QUE EL ID_USUARIO ASOCIADO A ESE REPORTE SEA == AL ID_USUARIO DEL USUARIO AUTENTICADO)
 
 }

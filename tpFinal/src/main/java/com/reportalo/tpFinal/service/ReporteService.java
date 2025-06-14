@@ -28,10 +28,10 @@ public class ReporteService {
 
     public boolean validarIdUsuario(Long idPath,String username){
 
-        System.out.println("soy el id de usuario que ingresaste en la url: " + idPath + "soy el username del usuario que se autentico: " + username);
+        System.out.println("[REPORTE SERVICE: VALIDAR ID USUARIO] soy el id de usuario que ingresaste en la url: " + idPath + "soy el username del usuario que se autentico: " + username);
 
         Optional<Usuario> optionalUsuario =usuarioRepository.findByUsername(username);
-        System.out.println("encontro el usuario x su username? " + optionalUsuario.isPresent());
+        System.out.println("encontro el usuario x el username del token autenticado? " + optionalUsuario.isPresent());
 
         return optionalUsuario
                 .map(usuario -> usuario.getId().equals(idPath))

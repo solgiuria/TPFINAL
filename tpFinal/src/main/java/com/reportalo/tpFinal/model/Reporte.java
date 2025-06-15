@@ -24,8 +24,13 @@ public class Reporte {
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
+    @Column(nullable = false, length = 1000)
     private String descripcion;
+
+    @Column(nullable = false)
     private LocalDateTime fecha_hora;
+
+    @Column(nullable = false, length = 255)
     private String ubicacion;
 
     @Enumerated(EnumType.STRING)
